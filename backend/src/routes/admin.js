@@ -1,0 +1,24 @@
+import { Router } from "express";
+import { createMovie, deleteMovie, updateMovie } from "../controllers/movieController.js";
+import { createShow, createTheater, dashboardStats, listAdminMovies, listAdminShows, listAdminTheaters, archiveShow, updateShow, updateTheater, archiveTheater } from "../controllers/adminController.js";
+import { listBookings } from "../controllers/bookingController.js";
+import { requireAdmin, requireAuth, csrfProtection } from "../middleware/auth.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+
+const router = Router();
+router.use(requireAuth, requireAdmin);
+router.get("/stats", asyncHandler(dashboardStats));
+router.get("/movies", asyncHandler(listAdminMovies));
+router.post("/movies", csrfProtection, asyncHandler(createMovie));
+router.patch("/movies/:id", csrfProtection, asyncHandler(updateMovie));
+router.delete("/movies/:id", csrfProtection, asyncHandler(deleteMovie));
+router.get("/shows", asyncHandler(listAdminShows));
+router.post("/shows", csrfProtection, asyncHandler(createShow));
+router.patch("/shows/:id", csrfProtection, asyncHandler(updateShow));
+router.delete("/shows/:id", csrfProtection, asyncHandler(archiveShow));
+router.get("/theaters", asyncHandler(listAdminTheaters));
+router.post("/theaters", csrfProtection, asyncHandler(createTheater));
+router.patch("/theaters/:id", csrfProtection, asyncHandler(updateTheater));
+router.delete("/theaters/:id", csrfProtection, asyncHandler(archiveTheater));
+router.get("/bookings", asyncHandler(listBookings));
+export default router;
